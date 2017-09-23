@@ -1,5 +1,3 @@
-/vendor/
 /.idea/
-/docs/
-dump.sql
+/vendor/
 composer.lock

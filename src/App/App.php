@@ -3,6 +3,7 @@
 namespace App;
 
 use Core\Database;
+use Core\Router;
 
 class App {
 
@@ -21,7 +22,13 @@ class App {
     /**
      * @var Database
      */
-    private $dbinstance;
+    private $db;
+
+
+    /**
+     * @var Router
+     */
+    private $router;
 
 
     /**
@@ -38,13 +45,31 @@ class App {
 
     private function __construct()
     {
-        require_once ROOT . '/config.php';
+        require_once ROOT . '/config/config.php';
         $this->config = $config;
+
+        $this->router = new Router();
     }
 
 
     /**
-     * Retourne la configuration
+     * Lance l'application
+     */
+    public function run(): void {
+        $this->initRouter();
+
+        if(isset($_GET['p'])) {
+            $page = $_GET['p'];
+        } else {
+            $page = 'home';
+        }
+
+        $this->router->match($page);
+    }
+
+
+    /**
+     * Retourne la configuration de l'application
      * @param string $key
      * @return string|null
      */
@@ -62,8 +87,8 @@ class App {
      * @return Database
      */
     public function getDatabase(): Database {
-        if(!is_null($this->dbinstance)) {
-            return $this->dbinstance;
+        if(!is_null($this->db)) {
+            return $this->db;
         }
         return new Database(
             $this->getConfig('db.host'),
@@ -71,6 +96,17 @@ class App {
             $this->getConfig('db.username'),
             $this->getConfig('db.password')
         );
+    }
+
+
+    /**
+     * Initialise le router
+     */
+    private function initRouter(): void {
+        require_once ROOT . '/config/routes.php';
+        foreach ($routes as $route => $callable) {
+            $this->router->addRoute($route, $callable);
+        }
     }
 
 }
