@@ -24,13 +24,6 @@ class App {
     private $dbinstance;
 
 
-    private function __construct()
-    {
-        require_once ROOT . '/config.php';
-        $this->config = $config;
-    }
-
-
     /**
      * Retourne l'instance de l'application
      * @return App
@@ -40,6 +33,13 @@ class App {
             return self::$_instance;
         }
         return self::$_instance = new App();
+    }
+
+
+    private function __construct()
+    {
+        require_once ROOT . '/config.php';
+        $this->config = $config;
     }
 
 
@@ -65,7 +65,7 @@ class App {
         if(!is_null($this->dbinstance)) {
             return $this->dbinstance;
         }
-        return new Database\MysqlDatabase(
+        return new Database(
             $this->getConfig('db.host'),
             $this->getConfig('db.dbname'),
             $this->getConfig('db.username'),

@@ -15,5 +15,6 @@
             "Core\\": "src/Core/"
         }
     },
-    "require": {}
+    "require": {},
+    "require-dev": {}
 }
