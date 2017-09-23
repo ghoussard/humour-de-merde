@@ -9,6 +9,7 @@ class Database {
      */
     private $pdo;
 
+
     public function __construct($host, $dbname, $username, $password) {
         $dsn = "mysql:host={$host};dbname={$dbname}";
         try {
@@ -18,6 +19,7 @@ class Database {
         }
     }
 
+
     /**
      * Retourne PDO
      * @return \PDO
@@ -25,4 +27,5 @@ class Database {
     public function getPDO(): \PDO {
         return $this->pdo;
     }
+
 }

@@ -52,6 +52,7 @@ class Model {
         return $req->execute(array_values($params));
     }
 
+
     /**
      * Met à jour un enregistrement
      * @param int $id
@@ -119,4 +120,5 @@ class Model {
         $req = $this->db->getPDO()->prepare("UPDATE {$this->table} SET deleted_at = null WHERE id = ?");
         return $req->execute([$id]);
     }
+
 }

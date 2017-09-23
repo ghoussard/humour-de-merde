@@ -2,4 +2,13 @@
 define('ROOT', dirname(__DIR__));
 require_once ROOT . '/vendor/autoload.php';
 
-$app = \App\App::getInstance();
+if(isset($_GET['p'])) {
+    $page = $_GET['p'];
+} else {
+    $page = 'home';
+}
+
+if($page === 'home') {
+    $controller = new \App\Controller\AppController();
+    $controller->home();
+}
