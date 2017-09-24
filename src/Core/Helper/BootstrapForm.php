@@ -2,7 +2,7 @@
 
 namespace Core\Helper;
 
-class BoostrapForm {
+class BootstrapForm {
 
     /**
      * @var array
@@ -10,13 +10,20 @@ class BoostrapForm {
     private $data;
 
 
-    public function __construct(array $data = []) {
+    /**
+     * @var array
+     */
+    private $errors;
+
+
+    public function __construct(array $data = [], array $errors = []) {
         $this->data = $data;
+        $this->errors = $errors;
     }
 
 
     /**
-     * Retourne une valeur du formulaire
+     * Retourne une valeur des données générées par le formulaire
      * @param string $key
      * @return mixed
      */
@@ -49,8 +56,9 @@ class BoostrapForm {
         $html .= "<input class=\"form-control\" ";
         $html .= "name=\"{$name}\" id=\"{$name}\" ";
         $html .= "{$params} value=\"{$this->getValue($name)}\"></input>";
+        $html .= $this->writeError($name);
 
-        return $this->surround($html);
+        return $this->surround($html, $this->isValid($name));
     }
 
 
@@ -76,13 +84,14 @@ class BoostrapForm {
             $html .= "<option value=\"{$item->id}\" {$selected}>{$item->name}</option>";
         }
         $html .= "</select>";
+        $html .= $this->writeError($name);
 
-        return $this->surround($html);
+        return $this->surround($html, $this->isValid($name));
     }
 
 
     /**
-     * Retourn un textarea
+     * Retourne un textarea
      * @param string $name
      * @param string $label
      * @param array $options
@@ -98,8 +107,9 @@ class BoostrapForm {
         $html .= "<textarea class=\"form-control\" ";
         $html .= "name=\"{$name}\" id=\"{$name}\" ";
         $html .= "{$params}>{$this->getValue($name)}</textarea>";
+        $html .= $this->writeError($name);
 
-        return $this->surround($html);
+        return $this->surround($html, $this->isValid($name));
     }
 
 
@@ -115,11 +125,49 @@ class BoostrapForm {
     /**
      * Entoure un champ de la balise adaptée et le retourne
      * @param string $html
+     * @param bool $valid
      * @param string $class
      * @return string
      */
-    private function surround(string $html, $class = 'form-group'): string {
+    private function surround(string $html, bool $valid, string $class = 'form-group'): string {
+        if(!$valid) {
+            return '<div class="'. $class . ' has-danger">' . $html . '</div>';
+        }
         return '<div class="'. $class . '">' . $html . '</div>';
+    }
+
+
+    /**
+     * Ecris l'erreur concernant un champ si il y en a une
+     * @param string $name
+     * @return string
+     */
+    private function writeError(string $name): string {
+        if(!$this->isValid($name)) {
+            $html = "<small class=\"form-text text-muted\">{$this->getError($name)}</small>";
+            return $html;
+        }
+        return "";
+    }
+
+
+    /**
+     * Vérifie si un champ est valide
+     * @param string $name
+     * @return bool
+     */
+    private function isValid(string $name): bool {
+        return !isset($this->errors[$name]);
+    }
+
+
+    /**
+     * Retourne l'erreur associée à un champ
+     * @param string $name
+     * @return string
+     */
+    private function getError(string $name): string {
+        return $this->errors[$name];
     }
 
 }
