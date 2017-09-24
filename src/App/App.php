@@ -3,6 +3,7 @@
 namespace App;
 
 use Core\Database;
+use Core\Helper\GlobalXSSFilter;
 use Core\Router;
 
 class App {
@@ -58,9 +59,8 @@ class App {
     public function run(): void {
         $this->initRouter();
 
-        if(isset($_GET['p'])) {
-            $page = $_GET['p'];
-        } else {
+        $page = GlobalXSSFilter::get('get', 'p');
+        if(is_null($page)) {
             $page = 'home';
         }
 
