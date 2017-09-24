@@ -7,7 +7,7 @@ class Model {
     /**
      * @var Database
      */
-    private $db;
+    protected $db;
 
 
     /**

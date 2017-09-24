@@ -22,7 +22,7 @@ class Controller {
      * @param string $view
      * @param array|null $data
      */
-    protected function render(string $view, array $data = null) {
+    protected function render(string $view, array $data = null): void {
        $view = str_replace('.', '/', $view);
 
        if(!is_null($data)) {
@@ -34,6 +34,16 @@ class Controller {
        $content = ob_get_clean();
 
        require_once $this->viewPath . '/templates/default.php';
+    }
+
+
+    /**
+     * Retourne un model
+     * @param $classname
+     * @return mixed
+     */
+    protected function getModel($classname): Model {
+        return new $classname((App::getInstance())->getDatabase());
     }
 
 }
