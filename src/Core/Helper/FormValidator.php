@@ -22,19 +22,6 @@ class FormValidator {
 
 
     /**
-     * Récupère une valeur du tableau à vérifier
-     * @param string $key
-     * @return mixed|null
-     */
-    private function getValue(string $key) {
-        if(isset($this->data[$key])) {
-            return $this->data[$key];
-        }
-        return null;
-    }
-
-
-    /**
      * Retourne les erreurs générées
      * @return array
      */
@@ -68,7 +55,7 @@ class FormValidator {
      */
     public function required(string ...$names): self {
         foreach($names as $name) {
-            if(!isset($this->data[$name])) {
+            if(is_null($this->getValue($name)) || empty($this->getValue($name))) {
                 $this->errors[$name] = "Ce champ est requis";
             }
         }
@@ -77,14 +64,14 @@ class FormValidator {
 
 
     /**
-     * Vérifie si un champ n'est pas vide
-     * @param \string[] ...$names
+     * Vérifie que deux champs sont égaux
+     * @param array $values
      * @return FormValidator
      */
-    public function notEmpty(string ...$names): self {
-        foreach($names as $name) {
-            if(empty($this->data[$name])) {
-                $this->errors[$name] = "Ce champ ne doit pas être vide";
+    public function equals(array $values): self {
+        foreach ($values as $v1 => $v2) {
+            if($this->getValue($v1)!==$this->getValue($v2)) {
+                $this->errors[$v2] = "Les champs ne sont pas égaux";
             }
         }
         return $this;
@@ -97,6 +84,19 @@ class FormValidator {
      */
     public function isValid(): bool {
         return !empty($this->data)&&empty($this->errors);
+    }
+
+
+    /**
+     * Récupère une valeur du tableau à vérifier
+     * @param string $key
+     * @return mixed|null
+     */
+    private function getValue(string $key) {
+        if(isset($this->data[$key])) {
+            return $this->data[$key];
+        }
+        return null;
     }
 
 }

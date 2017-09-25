@@ -2,25 +2,26 @@
 
 namespace App\Controller;
 
-use App\Model\CategoriesModel;
 use Core\Helper\BootstrapForm;
 use Core\Helper\FormValidator;
 use Core\Helper\GlobalXSSFilter;
 
-class JokesController extends AppController {
+class UserController extends AppController {
 
-    /**
-     * Crée une blague
-     */
-    public function add(): void {
-        $categoriesModel = $this->getModel(CategoriesModel::class);
-        $categories = $categoriesModel->findList();
+    public function login() {
+        $form = new BootstrapForm(GlobalXSSFilter::get('post'));
 
+        $this->render('user.login', compact('form'));
+    }
+
+
+    public function register() {
         $formValidator = new FormValidator();
         if(!empty(GlobalXSSFilter::get('post'))) {
             $formValidator = (new FormValidator(GlobalXSSFilter::get('post')))
-                ->lenght('content', 50)
-                ->required('category', 'content');
+                ->lenght('login', 2, 12)
+                ->required('login', 'mail', 'confirm_mail', 'password', 'confirm_password');
+
         }
 
         if($formValidator->isValid()) {
@@ -29,7 +30,6 @@ class JokesController extends AppController {
 
         $form = new BootstrapForm(GlobalXSSFilter::get('post'), $formValidator->getErrors());
 
-        $this->render('jokes.add', compact('form', 'categories'));
+        $this->render('user.register', compact('form'));
     }
-
 }

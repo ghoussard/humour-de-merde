@@ -3,5 +3,5 @@
 <form action="" method="post">
     <?= $form->select('category', 'Catégorie', $categories) ?>
     <?= $form->textarea('content', 'Intitulé') ?>
-    <?= $form->submit() ?>
+    <?= $form->submit("Proposer") ?>
 </form>

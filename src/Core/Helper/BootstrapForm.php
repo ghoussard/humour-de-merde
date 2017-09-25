@@ -96,8 +96,8 @@ class BootstrapForm {
      * Retourne un submit
      * @return string
      */
-    public function submit(): string {
-        return '<button type="submit" class="btn btn-primary">Proposer</button>';
+    public function submit(string $text): string {
+        return '<button type="submit" class="btn btn-primary">' . $text . '</button>';
     }
 
 
@@ -123,7 +123,7 @@ class BootstrapForm {
      * @return string
      */
     private function writeError(string $name): string {
-        return "<small class=\"form-text text-muted\">{$this->getError($name)}</small>";
+        return "<small class=\"form-text text-muted\"><span class=\"text-danger font-weight-bold\">{$this->getError($name)}</span></small>";
     }
 
 
@@ -157,6 +157,9 @@ class BootstrapForm {
      * @return string
      */
     private function getLabel(string $name, string $label): string {
+        if(strpos($label, '*', strlen($label)-1)===strlen($label)-1) {
+            return "<label class=\"font-weight-bold\" for=\"{$name}\">{$label}</label>";
+        }
         return "<label for=\"{$name}\">{$label}</label>";
     }
 
