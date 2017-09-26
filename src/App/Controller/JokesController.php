@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Model\CategoriesModel;
 use Core\Helper\BootstrapForm;
 use Core\Helper\FormValidator;
-use Core\Helper\GlobalXSSFilter;
+use Core\Helper\GlobalsManager;
 
 class JokesController extends AppController {
 
@@ -17,8 +17,8 @@ class JokesController extends AppController {
         $categories = $categoriesModel->findList();
 
         $formValidator = new FormValidator();
-        if(!empty(GlobalXSSFilter::get('post'))) {
-            $formValidator = (new FormValidator(GlobalXSSFilter::get('post')))
+        if(!empty(GlobalsManager::get('post'))) {
+            $formValidator = (new FormValidator(GlobalsManager::get('post')))
                 ->lenght('content', 50)
                 ->required('category', 'content');
         }
@@ -27,7 +27,7 @@ class JokesController extends AppController {
             //TODO: save in database
         }
 
-        $form = new BootstrapForm(GlobalXSSFilter::get('post'), $formValidator->getErrors());
+        $form = new BootstrapForm(GlobalsManager::get('post'), $formValidator->getErrors());
 
         $this->render('jokes.add', compact('form', 'categories'));
     }

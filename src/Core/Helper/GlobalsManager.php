@@ -2,7 +2,7 @@
 
 namespace Core\Helper;
 
-class GlobalXSSFilter {
+class GlobalsManager {
 
     /**
      * Sécurise et retourne la variable globale demandée

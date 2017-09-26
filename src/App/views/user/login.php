@@ -2,6 +2,6 @@
 
 <form action="" method="post">
     <?= $form->input('login', 'Identifiant', ['placeholder' => 'Pseudo ou e-mail']); ?>
-    <?= $form->input('login', 'Identifiant', ['type' => 'password']); ?>
+    <?= $form->input('password', 'Mot de passe', ['type' => 'password']); ?>
     <?= $form->submit("Se connecter"); ?>
 </form>
