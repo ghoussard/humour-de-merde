@@ -2,32 +2,15 @@
 
 namespace Core\Auth;
 
-use App\Entity\UserEntity;
-use Core\Database;
+use App\App;
 
 class DatabaseAuth {
 
-    /**
-     * @var Database
-     */
-    private $db;
-
 
     /**
      * @var string
      */
-    private $users_table = 'users';
-
-
-    /**
-     * @var string
-     */
-    private $user_entity = UserEntity::class;
-
-
-    public function __construct(Database $db) {
-        $this->db = $db;
-    }
+    private $table = 'users';
 
 
     /**
@@ -37,49 +20,44 @@ class DatabaseAuth {
      * @return bool
      */
     public function login(?string $login, ?string $password): bool {
-        if(is_null($login)||is_null($password)) {
-            return false;
+        if($this->checkLogin($login, $password)) {
+            $_SESSION['Auth'] = $this;
+            return true;
         }
-
-        $req = $this->db->getPDO()->prepare("SELECT * FROM {$this->users_table} WHERE login = :login OR mail = :login");
-        $req->execute([':login' => $login]);
-        $req->setFetchMode(\PDO::FETCH_CLASS, $this->user_entity);
-        $user = $req->fetch();
-
-        if(is_null($user)) {
-            return false;
-        }
-
-        if(!password_verify($password, $user->password)) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
 
     /**
-     * Enregistre un utilisateur
-     * @param array $params
+     * Vérifie le login et le mot de passe
+     * @param null|string $login
+     * @param null|string $password
      * @return bool
      */
-    public function register(array $params): bool {
-        $req = $this->db->getPDO()
-            ->prepare(
-                "INSERT INTO {$this->users_table} 
-                (login, password, mail, firstname, lastname, birthdate, registred_at) 
-                VALUES (:login, :password, :mail, :firstname, :lastname, :birthdate, sysdate())"
-            );
+    public function checkLogin(?string $login, ?string $password): bool {
+        if(is_null($login)||is_null($password)) {
+            return false;
+        }
 
-        extract($params);
+        $req = App::getInstance()->getDatabase()->getPDO()
+            ->prepare("SELECT * FROM {$this->table} WHERE login = :login OR mail = :login");
+        $req->execute([':login' => $login]);
+        $req->setFetchMode(\PDO::FETCH_INTO, $this);
+        $req->fetch();
 
-        $req->bindValue(':login', $login);
-        $req->bindValue(':password', password_hash($password, PASSWORD_BCRYPT));
-        $req->bindValue(':mail', $mail);
-        $req->bindValue(':firstname', $firstname);
-        $req->bindValue(':lastname', $lastname);
-        $req->bindValue('birthdate', $birthdate);
+        if(!isset($this->password)) {
+            return false;
+        }
 
-        return $req->execute();
+        return ($password==$this->password)||(password_verify($password, $this->password));
     }
+
+
+    /**
+     * Déconnecte l'utilisateur
+     */
+    public function logout(): void {
+        unset($_SESSION['Auth']);
+    }
+
 }

@@ -12,19 +12,23 @@ class JokesController extends AppController {
     /**
      * Crée une blague
      */
-    public function add(): void {
+    public function add() {
+        if(!$this->checkAuth()) {
+            return $this->notConnected();
+        }
+
         $categoriesModel = $this->getModel(CategoriesModel::class);
         $categories = $categoriesModel->findList();
 
         $formValidator = new FormValidator();
-        if(!empty(GlobalsManager::get('post'))) {
+        if($this->formSubmitted()) {
             $formValidator = (new FormValidator(GlobalsManager::get('post')))
                 ->lenght('content', 50)
                 ->required('category', 'content');
         }
 
         if($formValidator->isValid()) {
-            //TODO: save in database
+            //TODO: sauvegarder les données en bdd et génerer un message flash
         }
 
         $form = new BootstrapForm(GlobalsManager::get('post'), $formValidator->getErrors());

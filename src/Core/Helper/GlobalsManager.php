@@ -41,6 +41,9 @@ class GlobalsManager {
             case "get":
                 return $_GET;
                 break;
+            case "session":
+                return $_SESSION;
+                break;
             default:
                 return null;
                 break;

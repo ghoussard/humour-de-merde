@@ -21,4 +21,20 @@ class AppController extends Controller {
         $this->render('app.errors.404');
     }
 
+
+    /**
+     * Emet une erreur 403
+     */
+    public function forbidden() {
+        $this->render('app.errors.403');
+    }
+
+
+    /**
+     * Emet une erreur de défaut de connexion
+     */
+    public function notConnected() {
+        $this->render('app.errors.notConnected');
+    }
+
 }

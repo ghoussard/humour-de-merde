@@ -3,6 +3,7 @@
 namespace Core;
 
 use App\App;
+use Core\Helper\GlobalsManager;
 
 class Controller {
 
@@ -44,6 +45,29 @@ class Controller {
      */
     protected function getModel($classname): Model {
         return new $classname((App::getInstance())->getDatabase());
+    }
+
+
+    /**
+     * Vérifie si l'utilisateur est connecté
+     * @return bool
+     */
+    protected function checkAuth(): bool {
+        $auth = GlobalsManager::get('session', 'Auth');
+        if(is_null($auth)) {
+            return false;
+        }
+
+        return $auth->checkLogin($auth->login, $auth->password);
+    }
+
+
+    /**
+     * Vérifie si un formulaire a été soumis
+     * @return bool
+     */
+    protected function formSubmitted(): bool {
+        return !empty(GlobalsManager::get('post'));
     }
 
 }
