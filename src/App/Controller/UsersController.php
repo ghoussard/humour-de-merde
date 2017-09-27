@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Model\UsersModel;
 use Core\Auth\DatabaseAuth;
+use Core\Flash\BootstrapFlash;
+use Core\FlashManager;
 use Core\Helper\BootstrapForm;
 use Core\Helper\FormValidator;
 use Core\Helper\GlobalsManager;
@@ -20,9 +22,10 @@ class UsersController extends AppController {
                 GlobalsManager::get('post', 'login'),
                 GlobalsManager::get('post', 'password')
             )) {
-                //TODO: Générer un message flash et rediriger sur la page d'acceuil
+                FlashManager::addFlash(new BootstrapFlash('Connexion réussie', 'success'));
+                //TODO: Rediriger sur la page d'acceuil
             } else {
-                //TODO: Générer un message d'erreur
+                FlashManager::addFlash(new BootstrapFlash('Erreur de la connexion', 'danger'));
             }
         }
 
@@ -62,9 +65,10 @@ class UsersController extends AppController {
                 'birthdate' => (new \DateTime(GlobalsManager::get('post', 'birthdate')))->format('Y-m-d H:i:s')
             ];
             if($this->getModel(UsersModel::class)->register($params)) {
-                //TODO: Générer un message flash et rediriger sur la page de login
+                FlashManager::addFlash(new BootstrapFlash('Inscription réussie, vous pouvez désormais vous connectez', 'success'));
+                //TODO: rediriger sur la page de login
             } else {
-                //TODO: Générer un message d'erreur
+                FlashManager::addFlash(new BootstrapFlash("Erreur de l'enregistrement", 'danger'));
             }
         }
 
@@ -80,7 +84,8 @@ class UsersController extends AppController {
     public function logout() {
         if($this->checkAuth()) {
             GlobalsManager::get('session', 'Auth')->logout();
-            $this->render('users.logout');
+            FlashManager::addFlash(new BootstrapFlash('Déconnexion réussie', 'success'));
+            //TODO: Rediriger sur la page d'acceuil
         } else {
             $this->notConnected();
         }

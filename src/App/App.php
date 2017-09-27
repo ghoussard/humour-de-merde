@@ -57,6 +57,8 @@ class App {
      * Lance l'application
      */
     public function run(): void {
+        session_start();
+
         $this->initRouter();
 
         $page = GlobalsManager::get('get', 'p');

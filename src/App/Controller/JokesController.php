@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Model\CategoriesModel;
+use Core\Flash\BootstrapFlash;
+use Core\FlashManager;
 use Core\Helper\BootstrapForm;
 use Core\Helper\FormValidator;
 use Core\Helper\GlobalsManager;
@@ -28,7 +30,7 @@ class JokesController extends AppController {
         }
 
         if($formValidator->isValid()) {
-            //TODO: sauvegarder les données en bdd et génerer un message flash
+            FlashManager::addFlash(new BootstrapFlash("Votre blague a bien été soumise !", "success"));
         }
 
         $form = new BootstrapForm(GlobalsManager::get('post'), $formValidator->getErrors());

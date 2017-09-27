@@ -31,6 +31,7 @@ class Controller {
        }
 
        ob_start();
+       echo FlashManager::getFlash();
        require_once $this->viewPath . '/' . $view . '.php';
        $content = ob_get_clean();
 

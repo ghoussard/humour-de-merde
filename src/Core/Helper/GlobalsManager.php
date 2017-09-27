@@ -2,6 +2,8 @@
 
 namespace Core\Helper;
 
+use Core\Exception\GlobalsManagerException;
+
 class GlobalsManager {
 
     /**
@@ -15,7 +17,7 @@ class GlobalsManager {
         if(is_null($key)) {
             return $global;
         }
-        if(!is_null($global) && isset($global[$key])) {
+        if(isset($global[$key])) {
             if(is_string($global[$key])) {
                 return htmlspecialchars($global[$key]);
             }
@@ -32,6 +34,7 @@ class GlobalsManager {
      * Retourne le global appelé
      * @param string $global
      * @return array|null
+     * @throws GlobalsManagerException
      */
     private static function getGlobal(string $global): ?array {
         switch ($global) {
@@ -45,7 +48,7 @@ class GlobalsManager {
                 return $_SESSION;
                 break;
             default:
-                return null;
+                throw new GlobalsManagerException("Specified global does'nt exists");
                 break;
         }
     }

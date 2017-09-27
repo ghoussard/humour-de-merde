@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Core\Controller;
+use Core\FlashManager;
 
 class AppController extends Controller {
 
