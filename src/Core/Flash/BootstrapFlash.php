@@ -2,8 +2,6 @@
 
 namespace Core\Flash;
 
-use Core\Exception\BootstrapFlashException;
-
 class BootstrapFlash extends Flash {
 
     /**

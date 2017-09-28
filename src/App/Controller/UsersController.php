@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
+use App\App;
 use App\Model\UsersModel;
 use Core\Auth\DatabaseAuth;
 use Core\Flash\BootstrapFlash;
 use Core\FlashManager;
-use Core\Helper\BootstrapForm;
-use Core\Helper\FormValidator;
-use Core\Helper\GlobalsManager;
+use Core\Form\BootstrapForm;
+use Core\Form\FormValidator;
+use Core\GlobalsManager;
 
 class UsersController extends AppController {
 

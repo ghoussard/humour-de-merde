@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Model\CategoriesModel;
 use Core\Flash\BootstrapFlash;
 use Core\FlashManager;
-use Core\Helper\BootstrapForm;
-use Core\Helper\FormValidator;
-use Core\Helper\GlobalsManager;
+use Core\Form\BootstrapForm;
+use Core\Form\FormValidator;
+use Core\GlobalsManager;
 
 class JokesController extends AppController {
 

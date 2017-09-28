@@ -3,7 +3,7 @@
 namespace App;
 
 use Core\Database;
-use Core\Helper\GlobalsManager;
+use Core\GlobalsManager;
 use Core\Router;
 
 class App {
@@ -60,6 +60,7 @@ class App {
         session_start();
 
         $this->initRouter();
+
 
         $page = GlobalsManager::get('get', 'p');
         if(is_null($page)) {

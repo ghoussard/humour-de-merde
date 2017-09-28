@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Helper;
+namespace Core\Form;
 
 class FormValidator {
 

@@ -3,7 +3,6 @@
 namespace Core;
 
 use App\App;
-use Core\Helper\GlobalsManager;
 
 class Controller {
 

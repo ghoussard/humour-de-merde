@@ -3,29 +3,20 @@
 namespace Core\Auth;
 
 use App\App;
+use Core\Database;
 
-class DatabaseAuth {
+class DatabaseAuth extends Auth {
+
+    /**
+     * @var Database
+     */
+    private $db;
 
 
     /**
      * @var string
      */
     private $table = 'users';
-
-
-    /**
-     * Connecte un utilisateur
-     * @param null|string $login
-     * @param null|string $password
-     * @return bool
-     */
-    public function login(?string $login, ?string $password): bool {
-        if($this->checkLogin($login, $password)) {
-            $_SESSION['Auth'] = $this;
-            return true;
-        }
-        return false;
-    }
 
 
     /**
@@ -50,14 +41,6 @@ class DatabaseAuth {
         }
 
         return ($password==$this->password)||(password_verify($password, $this->password));
-    }
-
-
-    /**
-     * Déconnecte l'utilisateur
-     */
-    public function logout(): void {
-        unset($_SESSION['Auth']);
     }
 
 }
