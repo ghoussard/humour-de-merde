@@ -18,7 +18,7 @@ class UsersModel extends Model {
      * @return bool
      */
     public function register(array $params): bool {
-        $req = $this->db->getPDO()
+        $req = $this->db
             ->prepare(
                 "INSERT INTO {$this->table} 
                 (login, password, mail, firstname, lastname, birthdate, registred_at) 

@@ -11,8 +11,9 @@ abstract class Auth {
      * @return bool
      */
     public function login(?string $login, ?string $password): bool {
-        if($this->checkLogin($login, $password)) {
-            $_SESSION['Auth'] = $this;
+        $user = $this->checkLogin($login, $password);
+        if($user) {
+            $_SESSION['Auth'] = $user;
             return true;
         }
         return false;
@@ -25,13 +26,13 @@ abstract class Auth {
      * @param null|string $password
      * @return bool
      */
-    abstract function checkLogin(?string $login, ?string $password): bool;
+    abstract function checkLogin(?string $login, ?string $password);
 
 
     /**
      * Déconnecte l'utilisateur
      */
-    public function logout(): void {
+    public static function logout(): void {
         unset($_SESSION['Auth']);
     }
 

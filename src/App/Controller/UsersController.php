@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\App;
 use App\Model\UsersModel;
+use Core\Auth\Auth;
 use Core\Auth\DatabaseAuth;
 use Core\Flash\BootstrapFlash;
 use Core\FlashManager;
@@ -18,7 +19,7 @@ class UsersController extends AppController {
      */
     public function login() {
         if($this->formSubmitted()) {
-            $auth = new DatabaseAuth();
+            $auth = new DatabaseAuth(App::getInstance()->getDatabase());
             if($auth->login(
                 GlobalsManager::get('post', 'login'),
                 GlobalsManager::get('post', 'password')
@@ -84,7 +85,7 @@ class UsersController extends AppController {
      */
     public function logout() {
         if($this->checkAuth()) {
-            GlobalsManager::get('session', 'Auth')->logout();
+            Auth::logout();
             FlashManager::addFlash(new BootstrapFlash('Déconnexion réussie', 'success'));
             //TODO: Rediriger sur la page d'acceuil
         } else {

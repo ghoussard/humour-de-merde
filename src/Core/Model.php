@@ -47,7 +47,7 @@ class Model {
             }
         }
 
-        $req = $this->db->getPDO()->prepare("INSERT INTO {$this->table} ({$fields}) VALUES ({$values})");
+        $req = $this->db->prepare("INSERT INTO {$this->table} ({$fields}) VALUES ({$values})");
 
         return $req->execute(array_values($params));
     }
@@ -66,7 +66,7 @@ class Model {
         }
         $fields = join($fields, ', ');
 
-        $req = $this->db->getPDO()->prepare("UPDATE {$this->table} SET {$fields} WHERE id = ?");
+        $req = $this->db->prepare("UPDATE {$this->table} SET {$fields} WHERE id = ?");
 
         return $req->execute(array_merge(array_values($params), [$id]));
     }
@@ -78,7 +78,7 @@ class Model {
      * @return Entity|bool
      */
     public function find(int $id) {
-        $req = $this->db->getPDO()->prepare("SELECT * FROM {$this->table} WHERE id = ? AND deleted_at IS NULL");
+        $req = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ? AND deleted_at IS NULL");
         $req->execute([$id]);
         if(!is_null($this->entity)) {
             $req->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
@@ -92,11 +92,21 @@ class Model {
      * @return array
      */
     public function findAll(): array {
-        $req = $this->db->getPDO()->query("SELECT * FROM {$this->table} WHERE deleted_at IS NULL");
+        $req = $this->db->query("SELECT * FROM {$this->table} WHERE deleted_at IS NULL");
         if(!is_null($this->entity)) {
             return $req->fetchAll(\PDO::FETCH_CLASS, $this->entity);
         }
         return $req->fetchAll();
+    }
+
+
+    /**
+     * Liste les enregistrements
+     * @return array
+     */
+    public function findList(): array {
+        $req = $this->db->query("SELECT id, name FROM {$this->table}");
+        return $req->fetchAll(\PDO::FETCH_CLASS, $this->entity);
     }
 
 
@@ -106,7 +116,7 @@ class Model {
      * @return bool
      */
     public function delete(int $id): bool {
-        $req = $this->db->getPDO()->prepare("UPDATE {$this->table} SET deleted_at = sysdate() WHERE id = ?");
+        $req = $this->db->prepare("UPDATE {$this->table} SET deleted_at = sysdate() WHERE id = ?");
         return $req->execute([$id]);
     }
 
@@ -117,7 +127,7 @@ class Model {
      * @return bool
      */
     public function undelete(int $id): bool {
-        $req = $this->db->getPDO()->prepare("UPDATE {$this->table} SET deleted_at = null WHERE id = ?");
+        $req = $this->db->prepare("UPDATE {$this->table} SET deleted_at = null WHERE id = ?");
         return $req->execute([$id]);
     }
 

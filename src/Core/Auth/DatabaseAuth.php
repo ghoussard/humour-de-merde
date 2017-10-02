@@ -19,28 +19,33 @@ class DatabaseAuth extends Auth {
     private $table = 'users';
 
 
+    public function __construct(Database $db) {
+        $this->db = $db;
+    }
+
+
     /**
      * Vérifie le login et le mot de passe
      * @param null|string $login
      * @param null|string $password
-     * @return bool
+     * @return User|bool
      */
-    public function checkLogin(?string $login, ?string $password): bool {
+    public function checkLogin(?string $login, ?string $password) {
         if(is_null($login)||is_null($password)) {
             return false;
         }
 
-        $req = App::getInstance()->getDatabase()->getPDO()
-            ->prepare("SELECT * FROM {$this->table} WHERE login = :login OR mail = :login");
+        $req = $this->db->prepare("SELECT * FROM {$this->table} WHERE login = :login OR mail = :login");
         $req->execute([':login' => $login]);
-        $req->setFetchMode(\PDO::FETCH_INTO, $this);
-        $req->fetch();
+        $req->setFetchMode(\PDO::FETCH_CLASS, User::class);
+        $user = $req->fetch();
 
-        if(!isset($this->password)) {
-            return false;
-        }
+        if(($password==$user->password)||(password_verify($password, $user->password))) {
+            $user->authType = 'database';
+            return $user;
+        };
 
-        return ($password==$this->password)||(password_verify($password, $this->password));
+        return false;
     }
 
 }
