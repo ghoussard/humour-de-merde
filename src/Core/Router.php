@@ -13,23 +13,76 @@ class Router {
     /**
      * Ajoute une route au Router
      * @param string $route
-     * @param callable $callable
+     * @param string $path
+     * @param array $controller
+     * @internal param callable $callable
      */
-    public function addRoute(string $route, callable $callable): void {
-        $this->routes[$route] = $callable;
+    public function addRoute(string $route, string $path, array $controller): void {
+        $this->routes[$route] = [$path, $controller];
     }
 
 
     /**
      * Teste une route
-     * @param string $route
+     * @param string $path
+     * @internal param string $route
      */
-    public function match(string $route): void {
-        if(isset($this->routes[$route])) {
-            call_user_func($this->routes[$route]);
+    public function match(?string $path): void {
+        if(!is_null($path)) {
+            $paths = array_column($this->routes, 0);
+
+            if(in_array($path, $paths)) {
+                foreach ($this->routes as $key => $route) {
+                    if($route[0] === $path) {
+                        $route = $key;
+                        break;
+                    }
+                }
+            } else {
+                $this->notFound();
+            }
         } else {
-            $this->notFound();
+            $route = array_keys($this->routes)[0];
         }
+
+        $controller = $this->routes[$route][1][0];
+        $controller = new $controller();
+        $controller($this->routes[$route][1][1]);
+    }
+
+
+    /**
+     * Fait une redirection
+     * @param string $route
+     * @param int|null $id
+     * @param int|null $page
+     */
+    public function redirect(string $route, ?int $id = null, ?int $page = null): void {
+        $url = $this->generateUrl($route, $id, $page);
+        header("Location:{$url}");
+        exit();
+    }
+
+
+    /**
+     * Génère une url
+     * @param string $route
+     * @param int|null $id
+     * @param int|null $page
+     * @return string
+     */
+    public function generateUrl(string $route, ?int $id = null, ?int $page = null): string {
+        $url = '?p=' . $this->routes[$route][0];
+
+        if($id) {
+            $url .= "&id={$id}";
+        }
+
+        if($page) {
+            $url .= "&page={$page}";
+        }
+
+        return $url;
     }
 
 
@@ -37,7 +90,7 @@ class Router {
      * Renvoie vers une erreur 404
      */
     private function notFound(): void {
-        header('Location:?p=errors.404');
+        $this->redirect('404');
     }
 
 }

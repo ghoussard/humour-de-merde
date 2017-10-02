@@ -25,7 +25,7 @@ class UsersController extends AppController {
                 GlobalsManager::get('post', 'password')
             )) {
                 FlashManager::addFlash(new BootstrapFlash('Connexion réussie', 'success'));
-                //TODO: Rediriger sur la page d'acceuil
+                $this->router->redirect('home');
             } else {
                 FlashManager::addFlash(new BootstrapFlash('Erreur de la connexion', 'danger'));
             }
@@ -68,7 +68,7 @@ class UsersController extends AppController {
             ];
             if($this->getModel(UsersModel::class)->register($params)) {
                 FlashManager::addFlash(new BootstrapFlash('Inscription réussie, vous pouvez désormais vous connectez', 'success'));
-                //TODO: rediriger sur la page de login
+                $this->router->redirect('login');
             } else {
                 FlashManager::addFlash(new BootstrapFlash("Erreur de l'enregistrement", 'danger'));
             }
@@ -87,7 +87,7 @@ class UsersController extends AppController {
         if($this->checkAuth()) {
             Auth::logout();
             FlashManager::addFlash(new BootstrapFlash('Déconnexion réussie', 'success'));
-            //TODO: Rediriger sur la page d'acceuil
+            $this->router->redirect('home');
         } else {
             $this->notConnected();
         }

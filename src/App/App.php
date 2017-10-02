@@ -44,15 +44,6 @@ class App {
     }
 
 
-    private function __construct()
-    {
-        require_once ROOT . '/config/config.php';
-        $this->config = $config;
-
-        $this->router = new Router();
-    }
-
-
     /**
      * Lance l'application
      */
@@ -60,14 +51,7 @@ class App {
         session_start();
 
         $this->initRouter();
-
-
-        $page = GlobalsManager::get('get', 'p');
-        if(is_null($page)) {
-            $page = 'home';
-        }
-
-        $this->router->match($page);
+        $this->router->match(GlobalsManager::get('get', 'p'));
     }
 
 
@@ -103,12 +87,29 @@ class App {
 
 
     /**
+     * @return Router
+     */
+    public function getRouter(): Router {
+        return $this->router;
+    }
+
+
+    private function __construct()
+    {
+        require_once ROOT . '/config/config.php';
+        $this->config = $config;
+
+        $this->router = new Router();
+    }
+
+
+    /**
      * Initialise le router
      */
     private function initRouter(): void {
         require_once ROOT . '/config/routes.php';
-        foreach ($routes as $route => $callable) {
-            $this->router->addRoute($route, $callable);
+        foreach ($routes as $route => $details) {
+            $this->router->addRoute($route, $details[0], $details[1]);
         }
     }
 

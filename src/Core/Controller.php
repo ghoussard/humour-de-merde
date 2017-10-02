@@ -2,12 +2,24 @@
 
 namespace Core;
 
+
 class Controller {
 
     /**
-     * @var $string
+     * @var string
      */
     protected $viewPath;
+
+
+    /**
+     * @var Router
+     */
+    protected $router;
+
+
+    public function __invoke(string $method) {
+        $this->$method();
+    }
 
 
     /**
@@ -16,18 +28,20 @@ class Controller {
      * @param array|null $data
      */
     protected function render(string $view, array $data = null): void {
-       $view = str_replace('.', '/', $view);
+        $view = str_replace('.', '/', $view);
 
-       if(!is_null($data)) {
-           extract($data);
-       }
+        if(!is_null($data)) {
+            extract($data);
+        }
 
-       ob_start();
-       echo FlashManager::getFlash();
-       require_once $this->viewPath . '/' . $view . '.php';
-       $content = ob_get_clean();
+        $router = $this->router;
 
-       require_once $this->viewPath . '/templates/default.php';
+        ob_start();
+        echo FlashManager::getFlash();
+        require_once $this->viewPath . '/' . $view . '.php';
+        $content = ob_get_clean();
+
+        require_once $this->viewPath . '/templates/default.php';
     }
 
 

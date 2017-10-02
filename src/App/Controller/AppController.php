@@ -12,7 +12,8 @@ use Core\Model;
 class AppController extends Controller {
 
     public function __construct() {
-        $this->viewPath = (App::getInstance())->getConfig('viewPath');
+        $this->viewPath = ROOT . '/src/App/views';
+        $this->router = App::getInstance()->getRouter();
     }
 
 
@@ -66,15 +67,8 @@ class AppController extends Controller {
      * Emet une erreur 404
      */
     public function notFound() {
+        header("{$_SERVER['SERVER_PROTOCOL']} 404 Not Found");
         $this->render('app.errors.404');
-    }
-
-
-    /**
-     * Emet une erreur 403
-     */
-    public function forbidden() {
-        $this->render('app.errors.403');
     }
 
 
