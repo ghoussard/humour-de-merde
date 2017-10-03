@@ -32,7 +32,7 @@ class AppController extends Controller {
      * @return bool
      * @throws AuthException
      */
-    protected function checkAuth() {
+    protected function checkAuth(): bool {
         $user = GlobalsManager::get('session', 'Auth');
         if(is_null($user)) {
             return false;
@@ -51,14 +51,14 @@ class AppController extends Controller {
                 break;
         }
 
-        return $auth->checkLogin($user->login, $user->password);
+        return !is_null($auth->checkLogin($user->login, $user->password));
     }
 
 
     /**
      * Affiche la page d'acceuil
      */
-    public function home() {
+    public function home(): void {
         $this->render('app.home');
     }
 
@@ -66,7 +66,7 @@ class AppController extends Controller {
     /**
      * Emet une erreur 404
      */
-    public function notFound() {
+    public function notFound(): void {
         header("{$_SERVER['SERVER_PROTOCOL']} 404 Not Found");
         $this->render('app.errors.404');
     }
@@ -75,7 +75,7 @@ class AppController extends Controller {
     /**
      * Emet une erreur de défaut de connexion
      */
-    public function notConnected() {
+    public function notConnected(): void {
         $this->render('app.errors.notConnected');
     }
 

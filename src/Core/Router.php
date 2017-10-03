@@ -28,7 +28,7 @@ class Router {
      * @internal param string $route
      */
     public function match(?string $path): void {
-        if(!is_null($path)) {
+        if(!is_null($path)&&!empty($path)) {
             $paths = array_column($this->routes, 0);
 
             if(in_array($path, $paths)) {
@@ -41,6 +41,7 @@ class Router {
             } else {
                 $this->notFound();
             }
+
         } else {
             $route = array_keys($this->routes)[0];
         }
@@ -90,7 +91,7 @@ class Router {
      * Renvoie vers une erreur 404
      */
     private function notFound(): void {
-        $this->redirect('404');
+        $this->redirect('app.errors.404');
     }
 
 }

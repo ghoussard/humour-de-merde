@@ -17,7 +17,7 @@ class UsersController extends AppController {
     /**
      * Connecte un utilisateur
      */
-    public function login() {
+    public function login(): void {
         if($this->formSubmitted()) {
             $auth = new DatabaseAuth(App::getInstance()->getDatabase());
             if($auth->login(
@@ -25,14 +25,15 @@ class UsersController extends AppController {
                 GlobalsManager::get('post', 'password')
             )) {
                 FlashManager::addFlash(new BootstrapFlash('Connexion réussie', 'success'));
-                $this->router->redirect('home');
+                $this->router->redirect('app.home');
             } else {
                 FlashManager::addFlash(new BootstrapFlash('Erreur de la connexion', 'danger'));
             }
         }
 
         if($this->checkAuth()) {
-            return $this->alreadyLogin();
+            $this->alreadyLogin();
+            exit();
         }
 
         $form = new BootstrapForm(GlobalsManager::get('post'));
@@ -44,9 +45,10 @@ class UsersController extends AppController {
     /**
      * Enregistre un utilisateur
      */
-    public function register() {
+    public function register(): void {
         if($this->checkAuth()) {
-            return $this->alreadyLogin();
+            $this->alreadyLogin();
+            exit();
         }
 
         $formValidator = new FormValidator();
@@ -68,7 +70,7 @@ class UsersController extends AppController {
             ];
             if($this->getModel(UsersModel::class)->register($params)) {
                 FlashManager::addFlash(new BootstrapFlash('Inscription réussie, vous pouvez désormais vous connectez', 'success'));
-                $this->router->redirect('login');
+                $this->router->redirect('users.login');
             } else {
                 FlashManager::addFlash(new BootstrapFlash("Erreur de l'enregistrement", 'danger'));
             }
@@ -83,11 +85,11 @@ class UsersController extends AppController {
     /**
      * Déconnecte l'utlisateur
      */
-    public function logout() {
+    public function logout(): void {
         if($this->checkAuth()) {
             Auth::logout();
             FlashManager::addFlash(new BootstrapFlash('Déconnexion réussie', 'success'));
-            $this->router->redirect('home');
+            $this->router->redirect('app.home');
         } else {
             $this->notConnected();
         }
@@ -97,7 +99,7 @@ class UsersController extends AppController {
     /**
      * Vérifie si l'utilisateur est déjà connecté
      */
-    private function alreadyLogin() {
+    private function alreadyLogin(): void {
         $this->render('users.errors.alreadyLogin');
     }
 

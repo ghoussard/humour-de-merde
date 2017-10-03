@@ -14,9 +14,10 @@ class JokesController extends AppController {
     /**
      * Crée une blague
      */
-    public function add() {
+    public function add(): void {
         if(!$this->checkAuth()) {
-            return $this->notConnected();
+            $this->notConnected();
+            exit();
         }
 
         $categoriesModel = $this->getModel(CategoriesModel::class);
