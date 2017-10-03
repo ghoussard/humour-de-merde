@@ -6,14 +6,13 @@ use App\App;
 use Core\Auth\AuthException;
 use Core\Auth\DatabaseAuth;
 use Core\Controller;
-use Core\GlobalsManager;
+use Core\GlobalsManager\GlobalsManager;
 use Core\Model;
 
 class AppController extends Controller {
 
     public function __construct() {
         $this->viewPath = ROOT . '/src/App/views';
-        $this->router = App::getInstance()->getRouter();
     }
 
 
@@ -23,7 +22,7 @@ class AppController extends Controller {
      * @return mixed
      */
     protected function getModel($classname): Model {
-        return new $classname((App::getInstance())->getDatabase());
+        return new $classname(App::getInstance()->getDatabase());
     }
 
 

@@ -1,8 +1,6 @@
 <?php
 
-namespace Core;
-
-use Core\GlobalsManager\GlobalsManagerException;
+namespace Core\GlobalsManager;
 
 class GlobalsManager {
 

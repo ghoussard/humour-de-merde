@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Model\CategoriesModel;
 use Core\Flash\BootstrapFlash;
-use Core\FlashManager;
+use Core\Flash\FlashManager;
 use Core\Form\BootstrapForm;
 use Core\Form\FormValidator;
-use Core\GlobalsManager;
+use Core\GlobalsManager\GlobalsManager;
 
 class JokesController extends AppController {
 

@@ -3,18 +3,15 @@
 namespace Core;
 
 
+use Core\Flash\FlashManager;
+use Core\GlobalsManager\GlobalsManager;
+
 class Controller {
 
     /**
      * @var string
      */
     protected $viewPath;
-
-
-    /**
-     * @var Router
-     */
-    protected $router;
 
 
     public function __invoke(string $method) {
@@ -33,8 +30,6 @@ class Controller {
         if(!is_null($data)) {
             extract($data);
         }
-
-        $router = $this->router;
 
         ob_start();
         echo FlashManager::getFlash();

@@ -7,10 +7,10 @@ use App\Model\UsersModel;
 use Core\Auth\Auth;
 use Core\Auth\DatabaseAuth;
 use Core\Flash\BootstrapFlash;
-use Core\FlashManager;
+use Core\Flash\FlashManager;
 use Core\Form\BootstrapForm;
 use Core\Form\FormValidator;
-use Core\GlobalsManager;
+use Core\GlobalsManager\GlobalsManager;
 
 class UsersController extends AppController {
 
