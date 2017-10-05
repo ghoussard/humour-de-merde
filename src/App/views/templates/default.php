@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="<?= \App\App::getInstance()->getConfig('website.desc') ?>">
+    <meta name="description" content="<?= $this->getConfig('website.desc') ?>">
 
-    <title><?= \App\App::getInstance()->getConfig('website.name') ?></title>
+    <title><?= $this->getConfig('website.name') ?></title>
 
     <link href="./css/bootstrap.min.css" rel="stylesheet">
     <link href="./css/app.css" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="<?= \App\App::getInstance()->getRouter()->generateUrl('app.home') ?>"><?= \App\App::getInstance()->getConfig('website.dim') ?></a>
+    <a class="navbar-brand" href="<?= $this->url('app.home') ?>"><?= $this->getConfig('website.dim') ?></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -22,11 +22,11 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="<?= \App\App::getInstance()->getRouter()->generateUrl('jokes.add') ?>">Proposer</a>
+                <a class="nav-link" href="<?= $this->url('jokes.add') ?>">Proposer</a>
             </li>
         </ul>
     </div>
-</nav>
+</nav>-->
 
 <div class="container">
 

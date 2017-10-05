@@ -51,7 +51,7 @@ class App {
      * @return mixed
      * @internal param string $key
      */
-    public function getConfig(string $key) {
+    public function getConfig(?string $key = null) {
         return $this->config->get($key);
     }
 
@@ -93,6 +93,9 @@ class App {
     }
 
 
+    /**
+     * App constructor.
+     */
     private function __construct() {
         $this->config = new Config(ROOT . '/config/config.php', ROOT . '/config/routes.php');
         $this->router = new Router();
@@ -103,7 +106,8 @@ class App {
      * Initialise le router
      */
     private function initRouter(): void {
-        foreach ($this->config->getRoutes() as $route => $details) {
+        require ROOT . '/config/routes.php';
+        foreach ($routes as $route => $details) {
             $this->router->addRoute($route, $details[0], $details[1]);
         }
     }

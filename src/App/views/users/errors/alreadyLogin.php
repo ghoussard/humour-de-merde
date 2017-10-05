@@ -1,1 +1,1 @@
-<h1>Déjà connecté</h1>
+<h1>Vous êtes déjà connecté.</h1>

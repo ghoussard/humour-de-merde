@@ -4,12 +4,6 @@ namespace Core\Form;
 
 class BootstrapForm extends Form {
 
-    public function __construct(array $data = [], array $errors = []) {
-        $this->data = $data;
-        $this->errors = $errors;
-    }
-
-
     /**
      * Retourne un input
      * @param string $name

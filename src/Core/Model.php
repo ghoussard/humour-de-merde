@@ -22,6 +22,10 @@ class Model {
     protected $entity;
 
 
+    /**
+     * Model constructor.
+     * @param Database $db
+     */
     public function __construct(Database $db) {
         $this->db = $db;
     }

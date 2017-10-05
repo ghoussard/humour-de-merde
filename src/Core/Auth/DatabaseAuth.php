@@ -2,7 +2,6 @@
 
 namespace Core\Auth;
 
-use App\App;
 use Core\Database;
 
 class DatabaseAuth extends Auth {
@@ -19,6 +18,10 @@ class DatabaseAuth extends Auth {
     private $table = 'users';
 
 
+    /**
+     * DatabaseAuth constructor.
+     * @param Database $db
+     */
     public function __construct(Database $db) {
         $this->db = $db;
     }

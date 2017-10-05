@@ -16,6 +16,12 @@ class BootstrapFlash extends Flash {
     private $type;
 
 
+    /**
+     * BootstrapFlash constructor.
+     * @param string $message
+     * @param string $type
+     * @throws BootstrapFlashException
+     */
     public function __construct(string $message, string $type) {
         $this->message = $message;
         if(!in_array($type, ['success', 'info', 'warning', 'danger'])) {
@@ -25,6 +31,9 @@ class BootstrapFlash extends Flash {
     }
 
 
+    /**
+     * @return string
+     */
     public function __toString() {
         return "<div class=\"alert alert-{$this->type}\" role=\"alert\">{$this->message}</div>";
     }

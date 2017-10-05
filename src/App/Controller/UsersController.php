@@ -38,7 +38,7 @@ class UsersController extends AppController {
 
         $form = new BootstrapForm(GlobalsManager::get('post'));
 
-        $this->render('users.login', compact('form'));
+        $this->renderer->render('users.login', compact('form'));
     }
 
 
@@ -78,7 +78,7 @@ class UsersController extends AppController {
 
         $form = new BootstrapForm(GlobalsManager::get('post'), $formValidator->getErrors());
 
-        $this->render('users.register', compact('form'));
+        $this->renderer->render('users.register', compact('form'));
     }
 
 
@@ -100,7 +100,7 @@ class UsersController extends AppController {
      * Vérifie si l'utilisateur est déjà connecté
      */
     private function alreadyLogin(): void {
-        $this->render('users.errors.alreadyLogin');
+        $this->renderer->render('users.errors.alreadyLogin');
     }
 
 }

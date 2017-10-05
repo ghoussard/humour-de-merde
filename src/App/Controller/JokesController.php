@@ -36,7 +36,7 @@ class JokesController extends AppController {
 
         $form = new BootstrapForm(GlobalsManager::get('post'), $formValidator->getErrors());
 
-        $this->render('jokes.add', compact('form', 'categories'));
+        $this->renderer->render('jokes.add', compact('form', 'categories'));
     }
 
 }

@@ -17,6 +17,17 @@ class Form {
 
 
     /**
+     * Form constructor.
+     * @param array $data
+     * @param array $errors
+     */
+    public function __construct(array $data = [], array $errors = []) {
+        $this->data = $data;
+        $this->errors = $errors;
+    }
+
+
+    /**
      * Extraie les options
      * @param array $options
      * @return string

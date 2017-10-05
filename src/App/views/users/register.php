@@ -11,3 +11,5 @@
     <?= $form->input('bithdate', 'Date de naissance', ['type' => 'date']); ?>
     <?= $form->submit("S'inscrire"); ?>
 </form>
+
+<p>Déjà inscris ? Connecte-toi <a href="<?= $this->url('users.login') ?>">ici</a>.</p>

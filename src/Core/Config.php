@@ -4,30 +4,35 @@ namespace Core;
 
 class Config {
 
+    /**
+     * @var array
+     */
     private $config = [];
 
 
-    private $routes = [];
-
-
-    public function __construct(string $configFile, string $routesFile) {
+    /**
+     * Config constructor.
+     * @param string $configFile
+     */
+    public function __construct(string $configFile) {
         require $configFile;
         $this->config = $config;
-        require $routesFile;
-        $this->routes = $routes;
     }
 
 
-    public function get(string $key = null) {
+    /**
+     * Retourne la config
+     * @param null|string $key
+     * @return $this|mixed|null
+     */
+    public function get(?string $key = null) {
+        if(is_null($key)) {
+            return $this;
+        }
         if(isset($this->config[$key])) {
             return $this->config[$key];
         }
         return null;
-    }
-
-
-    public function getRoutes(): array {
-        return $this->routes;
     }
 
 }

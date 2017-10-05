@@ -8,21 +8,46 @@ use Core\Auth\DatabaseAuth;
 use Core\Controller;
 use Core\GlobalsManager\GlobalsManager;
 use Core\Model;
+use Core\Renderer;
 
 class AppController extends Controller {
 
+    /**
+     * AppController constructor.
+     */
     public function __construct() {
-        $this->viewPath = ROOT . '/src/App/views';
+        $this->router = App::getInstance()->getRouter();
+        $this->renderer = new Renderer(
+            ROOT . '/src/App/views',
+            '/templates',
+            App::getInstance()->getConfig(),
+            $this->router
+        );
     }
 
 
     /**
-     * Retourne un model
-     * @param $classname
-     * @return mixed
+     * Affiche la page d'acceuil
      */
-    protected function getModel($classname): Model {
-        return new $classname(App::getInstance()->getDatabase());
+    public function home(): void {
+        $this->renderer->render('app.home');
+    }
+
+
+    /**
+     * Emet une erreur 404
+     */
+    public function notFound(): void {
+        header("{$_SERVER['SERVER_PROTOCOL']} 404 Not Found");
+        $this->renderer->render('app.errors.404');
+    }
+
+
+    /**
+     * Emet une erreur de défaut de connexion
+     */
+    public function notConnected(): void {
+        $this->renderer->render('app.errors.notConnected');
     }
 
 
@@ -55,27 +80,21 @@ class AppController extends Controller {
 
 
     /**
-     * Affiche la page d'acceuil
+     * Vérifie si un formulaire a été soumis
+     * @return bool
      */
-    public function home(): void {
-        $this->render('app.home');
+    protected function formSubmitted(): bool {
+        return !empty(GlobalsManager::get('post'));
     }
 
 
     /**
-     * Emet une erreur 404
+     * Retourne un model
+     * @param $classname
+     * @return mixed
      */
-    public function notFound(): void {
-        header("{$_SERVER['SERVER_PROTOCOL']} 404 Not Found");
-        $this->render('app.errors.404');
-    }
-
-
-    /**
-     * Emet une erreur de défaut de connexion
-     */
-    public function notConnected(): void {
-        $this->render('app.errors.notConnected');
+    protected function getModel($classname): Model {
+        return new $classname(App::getInstance()->getDatabase());
     }
 
 }

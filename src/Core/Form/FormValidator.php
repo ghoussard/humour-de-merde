@@ -16,6 +16,10 @@ class FormValidator {
     private $data;
 
 
+    /**
+     * FormValidator constructor.
+     * @param array $data
+     */
     public function __construct(array $data = []) {
         $this->data = $data;
     }
