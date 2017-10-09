@@ -36,4 +36,13 @@ abstract class Auth {
         unset($_SESSION['Auth']);
     }
 
+
+    /**
+     * Vérifie si un utilisateur est connecté
+     * @return bool
+     */
+    public static function logged(): bool {
+        return isset($_SESSION['Auth'])&&!empty($_SESSION['Auth']);
+    }
+
 }

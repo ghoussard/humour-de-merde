@@ -25,8 +25,23 @@
                 <a class="nav-link" href="<?= $this->url('jokes.add') ?>">Proposer</a>
             </li>
         </ul>
+        <ul class="navbar-nav navbar-right">
+            <?php if(!$this->userLogged()): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $this->url('users.login') ?>">Connexion</a>
+                </li>
+            <?php else: ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $this->getUser()->login ?></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="#">Paramètres</a>
+                        <a class="dropdown-item" href="<?= $this->url('users.logout') ?>">Déconnexion</a>
+                    </div>
+                </li>
+            <?php endif; ?>
+        </ul>
     </div>
-</nav>-->
+</nav>
 
 <div class="container">
 

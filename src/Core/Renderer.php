@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Core\Auth\Auth;
+use Core\Auth\User;
 use Core\Flash\FlashManager;
 
 class Renderer {
@@ -85,6 +87,16 @@ class Renderer {
      */
     private function getConfig(string $key): string {
         return $this->config->get($key);
+    }
+
+
+    private function userLogged(): bool {
+        return Auth::logged();
+    }
+
+
+    private function getUser(): ?User {
+        return $_SESSION['Auth'];
     }
 
 }
