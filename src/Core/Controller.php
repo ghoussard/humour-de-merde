@@ -4,6 +4,8 @@ namespace Core;
 
 class Controller {
 
+    use GlobalsManager;
+
     /**
      * @var Renderer
      */
@@ -14,13 +16,4 @@ class Controller {
      * @var Router
      */
     protected $router;
-
-
-    /**
-     * @param string $method
-     */
-    public function __invoke(string $method) {
-        $this->$method();
-    }
-
 }

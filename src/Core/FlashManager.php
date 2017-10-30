@@ -1,6 +1,8 @@
 <?php
 
-namespace Core\Flash;
+namespace Core;
+
+use Core\FlashManager\Flash;
 
 class FlashManager {
 

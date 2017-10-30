@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Flash;
+namespace Core\FlashManager;
 
 class BootstrapFlash extends Flash {
 

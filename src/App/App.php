@@ -4,10 +4,10 @@ namespace App;
 
 use Core\Config;
 use Core\Database;
-use Core\GlobalsManager\GlobalsManager;
 use Core\Router;
 
 class App {
+
 
     /**
      * @var App
@@ -49,7 +49,6 @@ class App {
      * Retourne la configuration de l'application
      * @param string $key
      * @return mixed
-     * @internal param string $key
      */
     public function getConfig(?string $key = null) {
         return $this->config->get($key);
@@ -89,7 +88,9 @@ class App {
         session_start();
 
         $this->initRouter();
-        $this->router->match(GlobalsManager::get('get', 'p'));
+
+        $p = $_GET['p'] ?? '';
+        $this->router->match($p);
     }
 
 
@@ -97,7 +98,7 @@ class App {
      * App constructor.
      */
     private function __construct() {
-        $this->config = new Config(ROOT . '/config/config.php', ROOT . '/config/routes.php');
+        $this->config = new Config(ROOT . '/config/config.php');
         $this->router = new Router();
     }
 
@@ -106,9 +107,9 @@ class App {
      * Initialise le router
      */
     private function initRouter(): void {
-        require ROOT . '/config/routes.php';
-        foreach ($routes as $route => $details) {
-            $this->router->addRoute($route, $details[0], $details[1]);
+        $routes = require(ROOT . '/config/routes.php');
+        foreach ($routes as $path => $route) {
+            $this->router->addRoute($path, $route);
         }
     }
 

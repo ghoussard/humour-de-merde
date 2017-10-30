@@ -21,8 +21,8 @@ class UsersModel extends Model {
         $req = $this->db
             ->prepare(
                 "INSERT INTO {$this->table} 
-                (login, password, mail, firstname, lastname, birthdate, registred_at) 
-                VALUES (:login, :password, :mail, :firstname, :lastname, :birthdate, sysdate())"
+                (login, password, mail, lastname, firstname, birthdate, registred_at) 
+                VALUES (:login, :password, :mail, :lastname, :firstname, :birthdate, sysdate())"
             );
 
         extract($params);
@@ -30,11 +30,11 @@ class UsersModel extends Model {
         $req->bindValue(':login', $login);
         $req->bindValue(':password', password_hash($password, PASSWORD_BCRYPT));
         $req->bindValue(':mail', $mail);
-        $req->bindValue(':firstname', $firstname);
         $req->bindValue(':lastname', $lastname);
+        $req->bindValue(':firstname', $firstname);
         $req->bindValue('birthdate', $birthdate);
 
-        return $req->execute();
+        return $req->execute();;
     }
 
 }

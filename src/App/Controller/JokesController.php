@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 use App\Model\CategoriesModel;
-use Core\Flash\BootstrapFlash;
-use Core\Flash\FlashManager;
+use Core\FlashManager\BootstrapFlash;
+use Core\FlashManager;
 use Core\Form\BootstrapForm;
 use Core\Form\FormValidator;
-use Core\GlobalsManager\GlobalsManager;
 
 class JokesController extends AppController {
 
@@ -16,7 +15,7 @@ class JokesController extends AppController {
      */
     public function add(): void {
         if(!$this->checkAuth()) {
-            $this->notConnected();
+            (new ErrorsController())->notConnected();
             exit();
         }
 
@@ -25,7 +24,7 @@ class JokesController extends AppController {
 
         $formValidator = new FormValidator();
         if($this->formSubmitted()) {
-            $formValidator = (new FormValidator(GlobalsManager::get('post')))
+            $formValidator = (new FormValidator($this->getParsedGlobal('post')))
                 ->lenght('content', 50)
                 ->required('category', 'content');
         }
@@ -34,7 +33,7 @@ class JokesController extends AppController {
             FlashManager::addFlash(new BootstrapFlash("Votre blague a bien été soumise !", "success"));
         }
 
-        $form = new BootstrapForm(GlobalsManager::get('post'), $formValidator->getErrors());
+        $form = new BootstrapForm($this->getParsedGlobal('post'), $formValidator->getErrors());
 
         $this->renderer->render('jokes.add', compact('form', 'categories'));
     }

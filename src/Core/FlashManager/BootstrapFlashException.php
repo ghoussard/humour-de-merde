@@ -1,5 +1,5 @@
 <?php
 
-namespace Core\Flash;
+namespace Core\FlashManager;
 
 class BootstrapFlashException extends \Exception {}

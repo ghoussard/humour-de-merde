@@ -15,8 +15,7 @@ class Config {
      * @param string $configFile
      */
     public function __construct(string $configFile) {
-        require $configFile;
-        $this->config = $config;
+        $this->config = require($configFile);
     }
 
 

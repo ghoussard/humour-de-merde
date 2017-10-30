@@ -2,9 +2,7 @@
 
 namespace Core;
 
-use Core\Auth\Auth;
 use Core\Auth\User;
-use Core\Flash\FlashManager;
 
 class Renderer {
 

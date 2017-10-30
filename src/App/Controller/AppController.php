@@ -6,7 +6,6 @@ use App\App;
 use Core\Auth\AuthException;
 use Core\Auth\DatabaseAuth;
 use Core\Controller;
-use Core\GlobalsManager\GlobalsManager;
 use Core\Model;
 use Core\Renderer;
 
@@ -35,29 +34,12 @@ class AppController extends Controller {
 
 
     /**
-     * Emet une erreur 404
-     */
-    public function notFound(): void {
-        header("{$_SERVER['SERVER_PROTOCOL']} 404 Not Found");
-        $this->renderer->render('app.errors.404');
-    }
-
-
-    /**
-     * Emet une erreur de défaut de connexion
-     */
-    public function notConnected(): void {
-        $this->renderer->render('app.errors.notConnected');
-    }
-
-
-    /**
      * Vérifie si l'utilisateur est connecté
      * @return bool
      * @throws AuthException
      */
     protected function checkAuth(): bool {
-        $user = GlobalsManager::get('session', 'Auth');
+        $user = $this->getParsedGlobal('session', 'Auth');
         if(is_null($user)) {
             return false;
         }
@@ -84,7 +66,7 @@ class AppController extends Controller {
      * @return bool
      */
     protected function formSubmitted(): bool {
-        return !empty(GlobalsManager::get('post'));
+        return !empty($this->getParsedGlobal('post'));
     }
 
 

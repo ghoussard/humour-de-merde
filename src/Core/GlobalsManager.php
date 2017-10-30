@@ -1,8 +1,10 @@
 <?php
 
-namespace Core\GlobalsManager;
+namespace Core;
 
-class GlobalsManager {
+use Core\GlobalsManager\GlobalsManagerException;
+
+trait GlobalsManager {
 
     /**
      * Sécurise et retourne la variable globale demandée
@@ -10,7 +12,7 @@ class GlobalsManager {
      * @param string $key
      * @return mixed
      */
-    public static function get(string $global, string $key = null) {
+    public function getParsedGlobal(string $global, string $key = null) {
         $global = self::getGlobal($global);
         if(is_null($key)) {
             return $global;
@@ -34,7 +36,7 @@ class GlobalsManager {
      * @return array|null
      * @throws GlobalsManagerException
      */
-    private static function getGlobal(string $global): ?array {
+    private function getGlobal(string $global): ?array {
         switch ($global) {
             case "post":
                 return $_POST;

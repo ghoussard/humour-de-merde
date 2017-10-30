@@ -2,6 +2,7 @@
 
 namespace Core\Auth;
 
+use Core\Auth;
 use Core\Database;
 
 class DatabaseAuth extends Auth {

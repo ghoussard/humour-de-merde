@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Core\Router\RouterException;
+
 class Router {
 
     /**
@@ -11,44 +13,43 @@ class Router {
 
 
     /**
-     * Ajoute une route au Router
-     * @param string $route
+     * Ajoute une route
      * @param string $path
-     * @param array $controller
-     * @internal param callable $callable
+     * @param string $route
      */
-    public function addRoute(string $route, string $path, array $controller): void {
-        $this->routes[$route] = [$path, $controller];
+    public function addRoute(string $path, string $route): void {
+        $this->routes[$path] = $route;
     }
 
 
     /**
      * Teste une route
      * @param string $path
-     * @internal param string $route
      */
     public function match(?string $path): void {
-        if(!is_null($path)&&!empty($path)) {
-            $paths = array_column($this->routes, 0);
-
-            if(in_array($path, $paths)) {
-                foreach ($this->routes as $key => $route) {
-                    if($route[0] === $path) {
-                        $route = $key;
-                        break;
-                    }
-                }
-            } else {
-                $this->notFound();
-            }
-
-        } else {
-            $route = array_keys($this->routes)[0];
+        if(is_null($path)||empty($path)) {
+            $path = array_keys($this->routes)[0];
         }
 
-        $controller = $this->routes[$route][1][0];
+        if(!array_key_exists($path, $this->routes)) {
+            $this->notFound();
+            exit();
+        }
+
+        $action = $this->routes[$path];
+
+        $action = explode('.', $action);
+
+        if($action[0]==='admin') {
+            $controller = $controller = '\\App\\Controller\\Admin\\'.ucfirst($action[1]).'Controller';
+            $method = $action[2];
+        } else {
+            $controller = '\\App\\Controller\\'.ucfirst($action[0]).'Controller';
+            $method = $action[1];
+        }
+
         $controller = new $controller();
-        $controller($this->routes[$route][1][1]);
+        $controller->$method();
     }
 
 
@@ -71,9 +72,16 @@ class Router {
      * @param int|null $id
      * @param int|null $page
      * @return string
+     * @throws RouterException
      */
     public function generateUrl(string $route, ?int $id = null, ?int $page = null): string {
-        $url = '?p=' . $this->routes[$route][0];
+        $path = array_search($route, $this->routes);
+
+        if(!$path) {
+            throw new RouterException("This route doesn't exists");
+        }
+
+        $url = '?p=' . $path;
 
         if($id) {
             $url .= "&id={$id}";
@@ -91,7 +99,7 @@ class Router {
      * Renvoie vers une erreur 404
      */
     private function notFound(): void {
-        $this->redirect('app.errors.404');
+        $this->redirect('errors.notFound');
     }
 
 }

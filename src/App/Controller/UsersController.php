@@ -4,13 +4,12 @@ namespace App\Controller;
 
 use App\App;
 use App\Model\UsersModel;
-use Core\Auth\Auth;
+use Core\Auth;
 use Core\Auth\DatabaseAuth;
-use Core\Flash\BootstrapFlash;
-use Core\Flash\FlashManager;
+use Core\FlashManager;
+use Core\FlashManager\BootstrapFlash;
 use Core\Form\BootstrapForm;
 use Core\Form\FormValidator;
-use Core\GlobalsManager\GlobalsManager;
 
 class UsersController extends AppController {
 
@@ -21,8 +20,8 @@ class UsersController extends AppController {
         if($this->formSubmitted()) {
             $auth = new DatabaseAuth(App::getInstance()->getDatabase());
             if($auth->login(
-                GlobalsManager::get('post', 'login'),
-                GlobalsManager::get('post', 'password')
+                $this->getParsedGlobal('post', 'login'),
+                $this->getParsedGlobal('post', 'password')
             )) {
                 FlashManager::addFlash(new BootstrapFlash('Connexion réussie', 'success'));
                 $this->router->redirect('app.home');
@@ -32,11 +31,11 @@ class UsersController extends AppController {
         }
 
         if($this->checkAuth()) {
-            $this->alreadyLogin();
+            (new ErrorsController())->alreadyLogin();
             exit();
         }
 
-        $form = new BootstrapForm(GlobalsManager::get('post'));
+        $form = new BootstrapForm($_POST);
 
         $this->renderer->render('users.login', compact('form'));
     }
@@ -47,13 +46,13 @@ class UsersController extends AppController {
      */
     public function register(): void {
         if($this->checkAuth()) {
-            $this->alreadyLogin();
+            (new ErrorsController())->alreadyLogin();
             exit();
         }
 
         $formValidator = new FormValidator();
         if($this->formSubmitted()) {
-            $formValidator = (new FormValidator(GlobalsManager::get('post')))
+            $formValidator = (new FormValidator($_POST))
                 ->lenght('login', 2, 12)
                 ->equals(['password' => 'confirm_password', 'mail' => 'confirm_mail'])
                 ->required('login', 'mail', 'confirm_mail', 'password', 'confirm_password');
@@ -61,12 +60,12 @@ class UsersController extends AppController {
 
         if($formValidator->isValid()) {
             $params = [
-                'login' => GlobalsManager::get('post', 'login'),
-                'password' => GlobalsManager::get('post', 'password'),
-                'mail' => GlobalsManager::get('post', 'mail'),
-                'firstname' => GlobalsManager::get('post', 'firstname'),
-                'lastname' => GlobalsManager::get('post', 'lastname'),
-                'birthdate' => (new \DateTime(GlobalsManager::get('post', 'birthdate')))->format('Y-m-d H:i:s')
+                'login' => $this->getParsedGlobal('post', 'login'),
+                'password' => $this->getParsedGlobal('post', 'password'),
+                'mail' => $this->getParsedGlobal('post', 'mail'),
+                'lastname' => $this->getParsedGlobal('post', 'lastname'),
+                'firstname' => $this->getParsedGlobal('post', 'firstname'),
+                'birthdate' => (new \DateTime($this->getParsedGlobal('post', 'birthdate')))->format('Y-m-d H:i:s')
             ];
             if($this->getModel(UsersModel::class)->register($params)) {
                 FlashManager::addFlash(new BootstrapFlash('Inscription réussie, vous pouvez désormais vous connectez', 'success'));
@@ -76,7 +75,7 @@ class UsersController extends AppController {
             }
         }
 
-        $form = new BootstrapForm(GlobalsManager::get('post'), $formValidator->getErrors());
+        $form = new BootstrapForm($_POST, $formValidator->getErrors());
 
         $this->renderer->render('users.register', compact('form'));
     }
@@ -91,16 +90,8 @@ class UsersController extends AppController {
             FlashManager::addFlash(new BootstrapFlash('Déconnexion réussie', 'success'));
             $this->router->redirect('app.home');
         } else {
-            $this->notConnected();
+            (new ErrorsController())->notConnected();
         }
-    }
-
-
-    /**
-     * Vérifie si l'utilisateur est déjà connecté
-     */
-    private function alreadyLogin(): void {
-        $this->renderer->render('users.errors.alreadyLogin');
     }
 
 }

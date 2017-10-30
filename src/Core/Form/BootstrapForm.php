@@ -2,6 +2,8 @@
 
 namespace Core\Form;
 
+use Core\Form;
+
 class BootstrapForm extends Form {
 
     /**

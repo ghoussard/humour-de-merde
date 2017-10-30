@@ -1,6 +1,6 @@
 <?php
 
-$config = [
+return [
     'website.name' => 'Humour de merde',
     'website.dim' => 'HDM',
     'website.desc' => '',
