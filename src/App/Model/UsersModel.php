@@ -22,7 +22,7 @@ class UsersModel extends Model {
             ->prepare(
                 "INSERT INTO {$this->table} 
                 (login, password, mail, lastname, firstname, birthdate, registred_at) 
-                VALUES (:login, :password, :mail, :lastname, :firstname, :birthdate, sysdate())"
+                VALUES (:login, :password, :mail, :lastname, :firstname, :birthdate, NOW())"
             );
 
         extract($params);
@@ -32,9 +32,9 @@ class UsersModel extends Model {
         $req->bindValue(':mail', $mail);
         $req->bindValue(':lastname', $lastname);
         $req->bindValue(':firstname', $firstname);
-        $req->bindValue('birthdate', $birthdate);
+        $req->bindValue(':birthdate', $birthdate);
 
-        return $req->execute();;
+        return $req->execute();
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Model\CategoriesModel;
+use App\Model\JokesModel;
 use Core\FlashManager\BootstrapFlash;
 use Core\FlashManager;
 use Core\Form\BootstrapForm;
@@ -29,9 +30,17 @@ class JokesController extends AppController {
                 ->required ('category', 'content');
 
             if($form->isValid()) {
-                //TODO: implémenter l'enregistrement d'une blague
-                $form->initialize();
-                FlashManager::addFlash(new BootstrapFlash("Votre blague a bien été soumise !", "success"));
+                if($this->getModel(JokesModel::class)->proposeJoke([
+                    'content' => $this->getParsedGlobal('post', 'content'),
+                    'user_id' => $this->getParsedGlobal('session', 'Auth')->id,
+                    'category_id' => $this->getParsedGlobal('post', 'category')
+                ])) {
+                    $form->initialize();
+                    FlashManager::addFlash(new BootstrapFlash("Votre blague a bien été soumise !", "success"));
+                } else {
+                    FlashManager::addFlash(new BootstrapFlash("Erreur de l'enregistrement de la blague.", "danger"));
+                }
+
             }
         }
 
