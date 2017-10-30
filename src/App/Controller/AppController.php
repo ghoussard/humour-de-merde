@@ -6,10 +6,12 @@ use App\App;
 use Core\Auth\AuthException;
 use Core\Auth\DatabaseAuth;
 use Core\Controller;
-use Core\Model;
+use Core\GlobalsManager;
 use Core\Renderer;
 
 class AppController extends Controller {
+
+    use GlobalsManager;
 
     /**
      * AppController constructor.
@@ -67,16 +69,6 @@ class AppController extends Controller {
      */
     protected function formSubmitted(): bool {
         return !empty($this->getParsedGlobal('post'));
-    }
-
-
-    /**
-     * Retourne un model
-     * @param $classname
-     * @return mixed
-     */
-    protected function getModel($classname): Model {
-        return new $classname(App::getInstance()->getDatabase());
     }
 
 }

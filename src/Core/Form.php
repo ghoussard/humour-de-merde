@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Core\Form\FormValidator;
+
 class Form {
 
     /**
@@ -11,19 +13,50 @@ class Form {
 
 
     /**
-     * @var array
+     * @var FormValidator
      */
-    protected $errors;
+    protected $validator;
 
 
     /**
      * Form constructor.
      * @param array $data
-     * @param array $errors
      */
-    public function __construct(array $data = [], array $errors = []) {
+    public function __construct(array $data = []) {
         $this->data = $data;
-        $this->errors = $errors;
+    }
+
+
+    /**
+     * Vérifie si un champ est valide
+     * @param string $name
+     * @return bool
+     */
+    public function isValid(?string $name = null): bool {
+        if(is_null($name)) {
+            return empty($this->getValidator()->getErrors());
+        }
+        return !isset($this->getValidator()->getErrors()[$name]);
+    }
+
+
+    /**
+     * Retourne le validateur
+     * @return FormValidator
+     */
+    public function getValidator(): FormValidator {
+        if(is_null($this->validator)) {
+            return $this->validator = new FormValidator($this->data);
+        }
+        return $this->validator;
+    }
+
+
+    /**
+     * Efface les données du formulaire
+     */
+    public function initialize() {
+        $this->data = [];
     }
 
 
@@ -60,17 +93,6 @@ class Form {
      * @return string|null
      */
     protected function getError(string $name): ?string {
-        return $this->errors[$name];
+        return $this->validator->getErrors()[$name];
     }
-
-
-    /**
-     * Vérifie si un champ est valide
-     * @param string $name
-     * @return bool
-     */
-    protected function isValid(string $name): bool {
-        return !isset($this->errors[$name]);
-    }
-
 }

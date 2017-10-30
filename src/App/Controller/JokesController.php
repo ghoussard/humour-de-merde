@@ -6,7 +6,6 @@ use App\Model\CategoriesModel;
 use Core\FlashManager\BootstrapFlash;
 use Core\FlashManager;
 use Core\Form\BootstrapForm;
-use Core\Form\FormValidator;
 
 class JokesController extends AppController {
 
@@ -22,18 +21,19 @@ class JokesController extends AppController {
         $categoriesModel = $this->getModel(CategoriesModel::class);
         $categories = $categoriesModel->findList();
 
-        $formValidator = new FormValidator();
+        $form = new BootstrapForm($this->getParsedGlobal('post'));
+
         if($this->formSubmitted()) {
-            $formValidator = (new FormValidator($this->getParsedGlobal('post')))
+            $form->getValidator()
                 ->lenght('content', 50)
-                ->required('category', 'content');
-        }
+                ->required ('category', 'content');
 
-        if($formValidator->isValid()) {
-            FlashManager::addFlash(new BootstrapFlash("Votre blague a bien été soumise !", "success"));
+            if($form->isValid()) {
+                //TODO: implémenter l'enregistrement d'une blague
+                $form->initialize();
+                FlashManager::addFlash(new BootstrapFlash("Votre blague a bien été soumise !", "success"));
+            }
         }
-
-        $form = new BootstrapForm($this->getParsedGlobal('post'), $formValidator->getErrors());
 
         $this->renderer->render('jokes.add', compact('form', 'categories'));
     }

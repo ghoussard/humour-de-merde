@@ -2,9 +2,9 @@
 
 namespace Core;
 
-class Controller {
+use App\App;
 
-    use GlobalsManager;
+class Controller {
 
     /**
      * @var Renderer
@@ -16,4 +16,14 @@ class Controller {
      * @var Router
      */
     protected $router;
+
+
+    /**
+     * Retourne un model
+     * @param $classname
+     * @return mixed
+     */
+    protected function getModel($classname): Model {
+        return new $classname(App::getInstance()->getDatabase());
+    }
 }
